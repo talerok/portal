@@ -1,0 +1,33 @@
+<ng-template #valueTemplate let-row="row" let-column="column">
+    {{row[column.field]}}
+</ng-template>
+
+<ng-template #funcTemplate let-row let-column>
+    {{column.valueProvider(row[column.field], row)}}
+</ng-template>
+<p-table [columns]="columns" [paginator]="!!pageSize" [rows]="pageSize" 
+    [lazy]="true" [value]="rows" [totalRecords]="total" (onLazyLoad)="load($event)" [loading]="loading">
+    <ng-template pTemplate="header" let-columns>
+        <tr>
+            <th *ngFor="let col of columns" [pSortableColumn]="col.sortable ? col.field : null">
+                {{col.name}}
+                <p-sortIcon *ngIf="col.sortable" [field]="col.field"></p-sortIcon>
+            </th>
+        </tr>
+        <tr *ngIf="hasFilters">
+            <th *ngFor="let col of columns">
+                <ng-container *ngIf="col.iltration">
+                    <ng-container *ngTemplateOutlet="col.filtration; context: {apply: applyFilter}"> </ng-container>
+                </ng-container>
+            </th>
+        </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-rowData let-columns="columns">
+        <tr>
+            <td *ngFor="let col of columns">
+                <ng-container *ngTemplateOutlet="getTemplate(col); context {row: rowData, column: col}"></ng-container>
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
