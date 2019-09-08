@@ -10,10 +10,19 @@ export abstract class LocalValueProviderFactory {
                 return value <= filter.value;
             case ColumnFiltrationType.ME:
                 return value >= filter.value;
-            case ColumnFiltrationType.BT:
+            case ColumnFiltrationType.IN:
                 return value >= filter.value[0] && value <= filter.value[1];
             case ColumnFiltrationType.EQ:
                 return Array.isArray(filter.value) ? filter.value.indexOf(value) !== -1 : filter.value === value;
+            case ColumnFiltrationType.CT:
+                const type = typeof(value);
+                if (type === 'string' || Array.isArray(value)) {
+                    return value.indexOf(filter.value) !== -1;
+                } else if (type === 'boolean' || type === 'number') {
+                    return String(value).indexOf(value) !== -1;
+                } else {
+                    return false;
+                }
         }
         return false;
     }
@@ -60,7 +69,7 @@ export abstract class LocalValueProviderFactory {
         return (args: TableValueProviderArguments) => {
             const sortedData = this._sorting(data, args.sotring);
             const filteredData = this._filterData(sortedData, args.filtration); 
-            const pagedData = this._paging(data, args.page, args.size);
+            const pagedData = this._paging(filteredData, args.page, args.size);
             return of({
                 total: filteredData.length,
                 result: pagedData

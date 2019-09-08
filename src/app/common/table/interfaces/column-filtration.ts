@@ -1,10 +1,11 @@
 
 
 export enum ColumnFiltrationType {
-    EQ = 0,
-    BT = 1,
-    ME = 2,
-    LE = 3
+    EQ = 'EQ', // Equals
+    IN = 'IN', // Between
+    ME = 'ME', // More or Equal
+    LE = 'LE', // Less or Equal
+    CT = 'CT' // Contains
 }
 
 export interface ColumnFiltration {

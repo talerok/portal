@@ -16,8 +16,8 @@
         </tr>
         <tr *ngIf="hasFilters">
             <th *ngFor="let col of columns">
-                <ng-container *ngIf="col.iltration">
-                    <ng-container *ngTemplateOutlet="col.filtration; context: {apply: applyFilter}"> </ng-container>
+                <ng-container *ngIf="col.filtration">
+                    <ng-container *ngTemplateOutlet="col.filtration; context: {apply: generateFilterFunc(col)}"> </ng-container>
                 </ng-container>
             </th>
         </tr>

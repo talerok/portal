@@ -1,1 +1,5 @@
-<app-table [valueProvider]="val" [columns]="columns"></app-table>
+<ng-template #inputFilterTpl let-apply="apply">
+    <app-table-input-filter (filter)="apply($event)"></app-table-input-filter>
+</ng-template>
+
+<app-table [value]="val" [columns]="columns"></app-table>

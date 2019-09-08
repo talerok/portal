@@ -1,6 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { TableColumn } from './common/table/models/table-column';
-import { LocalValueProviderFactory } from './common/table/valueProviders/local-value-provider-factory';
 
 class Test {
     constructor(public readonly name: string, public readonly description: number) { }
@@ -13,11 +12,10 @@ class Test {
 })
 export class AppComponent implements OnInit {
 
-    public readonly val = LocalValueProviderFactory.get(this._generateFakeData(100));
-    public readonly columns: TableColumn[] = [
-        new TableColumn('Имя', 'name', null, null, true),
-        new TableColumn('Описание', 'description', null, null, true)
-    ];
+    @ViewChild('inputFilterTpl', { static: true }) inputFilterTpl: TemplateRef<any>;
+
+    public readonly val = this._generateFakeData(1000);
+    public columns: TableColumn[];
 
     private _generateFakeData(count: number) {
         const res = [];
@@ -28,7 +26,10 @@ export class AppComponent implements OnInit {
     }
 
     ngOnInit() {
-
+        this.columns = [
+            new TableColumn('Имя', 'name', null, this.inputFilterTpl, true),
+            new TableColumn('Описание', 'description', null, null, true)
+        ];
     }
 
 }

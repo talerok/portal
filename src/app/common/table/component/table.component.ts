@@ -1,9 +1,11 @@
-import { Component, OnInit, ChangeDetectionStrategy, Input, ViewChild, TemplateRef, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, Input, ViewChild, TemplateRef, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { TableColumn } from '../models/table-column';
 import { TableValueProvider, TableValueProviderResponse } from '../interfaces/table-value-provider';
 import { ColumnFiltration } from '../interfaces/column-filtration';
-import { take } from 'rxjs/operators';
+import { take, takeUntil, skip } from 'rxjs/operators';
 import { Table } from 'primeng/table';
+import { LocalValueProviderFactory } from '../valueProviders/local-value-provider-factory';
+import { BehaviorSubject, Subject } from 'rxjs';
 
 @Component({
   selector: 'app-table',
@@ -11,14 +13,28 @@ import { Table } from 'primeng/table';
   styleUrls: ['./table.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TableComponent implements OnInit {
+export class TableComponent implements OnInit, OnDestroy {
 
     @ViewChild('valueTemplate', { static: true }) valueTemplate: TemplateRef<any>;
     @ViewChild('funcTemplate', { static: true }) funcTemplate: TemplateRef<any>;
     @ViewChild(Table, { static: true }) table: Table;
 
     @Input() columns: TableColumn[] = null;
-    @Input() valueProvider: TableValueProvider = null;
+    private _valueProvider$ = new BehaviorSubject<TableValueProvider>(null);
+    private _takeUntil$ = new Subject<boolean>();
+
+    public get valueProvider(): TableValueProvider {
+        return this._valueProvider$.value;
+    }
+
+    @Input() set value(val: any[] | TableValueProvider) {
+        if(Array.isArray(val)) {
+            this._valueProvider$.next(LocalValueProviderFactory.get(val));
+        } else {
+            this._valueProvider$.next(val);
+        }
+    }
+
     @Input() pageSize = 15;
 
     private _lastData: TableValueProviderResponse = null;
@@ -47,9 +63,16 @@ export class TableComponent implements OnInit {
             return column.valueProvider;
         }
     }
-
-    public applyFilter(column: TableColumn, filters: ColumnFiltration) {
-        this._filters[column.field] = filters;
+    
+    public generateFilterFunc(column: TableColumn) {
+        return (filter: ColumnFiltration) => {
+            if (filter) {
+                this._filters[column.field] = filter;
+            } else if(this._filters[column.field]) {
+                delete(this._filters[column.field]);
+            }
+            this.reset();
+        };
     }
 
     private _load() {
@@ -72,7 +95,6 @@ export class TableComponent implements OnInit {
         .subscribe(x => {
             this._lastData = x;
             this._changeDetectorRef.markForCheck();
-            console.log(sorting);
         },
         err => {},
         () => {
@@ -102,7 +124,15 @@ export class TableComponent implements OnInit {
     }
 
     ngOnInit() {
+        this._takeUntil$
+        .pipe(
+            takeUntil(this._takeUntil$),
+            skip(1)
+        ).subscribe(x => this.reset());
+    }
 
+    ngOnDestroy() {
+        this._takeUntil$.next(true);
     }
 
 }
