@@ -89,7 +89,6 @@ export class TableComponent implements OnInit, OnDestroy {
         if (!this.valueProvider) {
             return;
         }
-
         const sorting = this.table.sortField ? {column: this.table.sortField, direction: this.table.sortOrder} : null;
         const page = this.table.first / this.pageSize + 1;
         this.loading = true;
@@ -125,8 +124,9 @@ export class TableComponent implements OnInit, OnDestroy {
 
     public reset() {
         this.table.first = 0;
-        this.table.sortField = null;
-        this._load();
+        this.table.sortOrder = 0;
+        this.table.sortField = '';
+        this.table.reset();
     }
 
     constructor(private readonly _changeDetectorRef: ChangeDetectorRef) {
@@ -134,11 +134,13 @@ export class TableComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this._takeUntil$
+        this._valueProvider$
         .pipe(
             takeUntil(this._takeUntil$),
             skip(1)
-        ).subscribe(x => this.reset());
+        ).subscribe(x => {
+            this.reset();
+        });
     }
 
     ngOnDestroy() {

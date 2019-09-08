@@ -14,7 +14,7 @@ export class AppComponent implements OnInit {
 
     @ViewChild('inputFilterTpl', { static: true }) inputFilterTpl: TemplateRef<any>;
 
-    public readonly val = this._generateFakeData(1000);
+    public val = this._generateFakeData(1000);
     public columns: TableColumn[];
 
     private _generateFakeData(count: number) {
@@ -23,6 +23,10 @@ export class AppComponent implements OnInit {
             res.push(new Test(`Имя ${i}`, i*i))
         }
         return res;
+    }
+
+    public testClick() {
+        this.val = this._generateFakeData(20);
     }
 
     ngOnInit() {
