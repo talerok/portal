@@ -35,10 +35,16 @@ export class TableComponent implements OnInit, OnDestroy {
         }
     }
 
+    @Input() set globalFilters(value: {[column: string]: ColumnFiltration;}) {
+        this._globalFilters = value;
+        this.reset();
+    }
+
     @Input() pageSize = 15;
 
     private _lastData: TableValueProviderResponse = null;
     private _filters: {[column: string]: ColumnFiltration;} = {};
+    private _globalFilters: {[column: string]: ColumnFiltration;} = {};
 
     public loading = false;
 
@@ -75,6 +81,10 @@ export class TableComponent implements OnInit, OnDestroy {
         };
     }
 
+    private _generateFilters() {
+        return Object.assign({}, this._filters, this._globalFilters);
+    }
+
     private _load() {
         if (!this.valueProvider) {
             return;
@@ -87,7 +97,7 @@ export class TableComponent implements OnInit, OnDestroy {
             page: page,
             size: this.pageSize,
             sotring: sorting,
-            filtration: this._filters
+            filtration: this._generateFilters()
         })
         .pipe(
             take(1)
