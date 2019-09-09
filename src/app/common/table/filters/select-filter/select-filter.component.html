@@ -1,0 +1,9 @@
+<p-dropdown *ngIf='!multi; else multiTpl'
+    [options]="options" [showClear]="true" [placeholder]="placeholder" [(ngModel)]="value" (ngModelChange)="apply()" appendTo="body"></p-dropdown>
+
+<ng-template #multiTpl>
+    <p-multiSelect
+        [options]="options" [(ngModel)]="value" (ngModelChange)="apply()" appendTo="body" [defaultLabel]="placeholder"
+        selectedItemsLabel="Выбрано фильров - {0}"
+        ></p-multiSelect>
+</ng-template>

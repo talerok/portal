@@ -19,7 +19,7 @@ export abstract class LocalValueProviderFactory {
                 if (type === 'string' || Array.isArray(value)) {
                     return value.indexOf(filter.value) !== -1;
                 } else if (type === 'boolean' || type === 'number') {
-                    return String(value).indexOf(value) !== -1;
+                    return String(value).indexOf(filter.value) !== -1;
                 } else {
                     return false;
                 }
@@ -35,6 +35,7 @@ export abstract class LocalValueProviderFactory {
         let res = data;
         
         Object.keys(filters).forEach(field => {
+            console.log(field);
             const filter = filters[field];
             res = res.filter(x => this._filterValue(x[field], filter));
         });
@@ -80,5 +81,4 @@ export abstract class LocalValueProviderFactory {
             });
         };
     }
-
 }

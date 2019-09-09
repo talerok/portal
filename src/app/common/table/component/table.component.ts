@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, Input, ViewChild, TemplateRef, ChangeDetectorRef, OnDestroy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, Input, ViewChild, TemplateRef, ChangeDetectorRef, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { TableColumn } from '../models/table-column';
 import { TableSelectionType } from '../models/selection-type';
 import { TableValueProvider, TableValueProviderResponse } from '../interfaces/table-value-provider';
@@ -44,9 +44,25 @@ export class TableComponent implements OnInit, OnDestroy {
 
     @Input() pageSize = 15;
     @Input() contextMenu: MenuItem[] = null;
-    @Input() selectionType: TableSelectionType = TableSelectionType.checkbox;
+    @Input() selectionType: TableSelectionType = TableSelectionType.single;
 
-    public selection: any[] = [];
+    private _selection: any[] = [];
+
+    @Input() set selection(value: any[]) {
+        this._selection = this.selection;
+    }
+
+    @Output() selectionChange = new EventEmitter<any[]>();
+
+    get selection(): any[] {
+        return this._selection;
+    }
+
+    public onSelectionChange(data: any[]) {
+        this._selection = data;
+        this.selectionChange.emit(data);
+    }
+
 
     public getSelectionType() {
         return this.selectionType === TableSelectionType.multiple || this.selectionType === TableSelectionType.single ?
@@ -103,6 +119,7 @@ export class TableComponent implements OnInit, OnDestroy {
         const sorting = this.table.sortField ? {column: this.table.sortField, direction: this.table.sortOrder} : null;
         const page = this.table.first / this.pageSize + 1;
         this.loading = true;
+        this.onSelectionChange(null);
         this.valueProvider({
             page: page,
             size: this.pageSize,

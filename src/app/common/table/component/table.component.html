@@ -9,7 +9,7 @@
 </ng-template>
 <p-table [columns]="columns" [paginator]="!!pageSize" [rows]="pageSize" [contextMenu]="contextMenu ? cm : null"
     [lazy]="true" [value]="rows" [totalRecords]="total" (onLazyLoad)="load($event)" [loading]="loading" 
-    [selectionMode]="getSelectionType()" [(selection)]="selection">
+    [selectionMode]="getSelectionType()" [selection]="selection" (selectionChange)="onSelectionChange($event)">
     <ng-template pTemplate="header" let-columns>
         <tr>
             <th *ngIf="selectionType === 'checkbox'" style="width: 3em">
