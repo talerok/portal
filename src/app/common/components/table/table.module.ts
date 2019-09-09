@@ -12,29 +12,29 @@ import { SelectFilterComponent } from './filters/select-filter/select-filter.com
 import {MultiSelectModule} from 'primeng/multiselect';
 
 @NgModule({
-    declarations: [
-      TableComponent,
-      InputFilterComponent,
-      SelectFilterComponent
-    ],
-    imports: [
-        BrowserModule,
-        BrowserAnimationsModule,
-        FormsModule,
-        pTable.TableModule,
-        InputTextModule,
-        ContextMenuModule,
-        DropdownModule,
-        MultiSelectModule
-    ],
-    providers: [
-    ],
-    exports: [
-      TableComponent,
-      InputFilterComponent,
-      SelectFilterComponent
-    ]
-  })
-  export class TableModule {
+	declarations: [
+	TableComponent,
+	InputFilterComponent,
+	SelectFilterComponent
+	],
+	imports: [
+		BrowserModule,
+		BrowserAnimationsModule,
+		FormsModule,
+		pTable.TableModule,
+		InputTextModule,
+		ContextMenuModule,
+		DropdownModule,
+		MultiSelectModule
+	],
+	providers: [
+	],
+	exports: [
+	TableComponent,
+	InputFilterComponent,
+	SelectFilterComponent
+	]
+})
+export class TableModule {
 
-  }
+}
