@@ -3,7 +3,7 @@
 
 <ng-template #multiTpl>
     <p-multiSelect
-        [options]="options" [(ngModel)]="value" (ngModelChange)="apply()" appendTo="body" [defaultLabel]="placeholder"
+        [options]="options" [(ngModel)]="value" (onPanelHide)="apply()" appendTo="body" [defaultLabel]="placeholder"
         selectedItemsLabel="Выбрано фильров - {0}"
         ></p-multiSelect>
 </ng-template>
