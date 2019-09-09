@@ -1,11 +1,13 @@
 import { Component, OnInit, ChangeDetectionStrategy, Input, ViewChild, TemplateRef, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { TableColumn } from '../models/table-column';
+import { TableSelectionType } from '../models/selection-type';
 import { TableValueProvider, TableValueProviderResponse } from '../interfaces/table-value-provider';
 import { ColumnFiltration } from '../interfaces/column-filtration';
 import { take, takeUntil, skip } from 'rxjs/operators';
 import { Table } from 'primeng/table';
 import { LocalValueProviderFactory } from '../valueProviders/local-value-provider-factory';
 import { BehaviorSubject, Subject } from 'rxjs';
+import { MenuItem } from 'primeng/components/common/menuitem';
 
 @Component({
   selector: 'app-table',
@@ -41,6 +43,15 @@ export class TableComponent implements OnInit, OnDestroy {
     }
 
     @Input() pageSize = 15;
+    @Input() contextMenu: MenuItem[] = null;
+    @Input() selectionType: TableSelectionType = TableSelectionType.checkbox;
+
+    public selection: any[] = [];
+
+    public getSelectionType() {
+        return this.selectionType === TableSelectionType.multiple || this.selectionType === TableSelectionType.single ?
+            this.selectionType : null;
+    }
 
     private _lastData: TableValueProviderResponse = null;
     private _filters: {[column: string]: ColumnFiltration;} = {};

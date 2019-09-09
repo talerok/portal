@@ -2,6 +2,6 @@
     <app-table-input-filter (filter)="apply($event)"></app-table-input-filter>
 </ng-template>
 
-<app-table [value]="val" [columns]="columns"></app-table>
+<app-table [value]="val" [columns]="columns" [contextMenu]="contextMenu" [pageSize]="0"></app-table>
 
 <button (click)="testClick()">click</button>

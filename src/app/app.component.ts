@@ -17,6 +17,8 @@ export class AppComponent implements OnInit {
     public val = this._generateFakeData(1000);
     public columns: TableColumn[];
 
+    public contextMenu = null;
+
     private _generateFakeData(count: number) {
         const res = [];
         for(let i = 0; i < count; i++) {

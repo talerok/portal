@@ -5,6 +5,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { TableComponent } from './component/table.component';
 import { InputFilterComponent } from './filters/input-filter/input-filter.component';
 import {InputTextModule} from 'primeng/inputtext';
+import { ContextMenuModule } from 'primeng/contextmenu';
 
 @NgModule({
     declarations: [
@@ -15,7 +16,8 @@ import {InputTextModule} from 'primeng/inputtext';
         BrowserModule,
         FormsModule,
         pTable.TableModule,
-        InputTextModule
+        InputTextModule,
+        ContextMenuModule
     ],
     providers: [
     ],

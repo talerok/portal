@@ -61,6 +61,10 @@ export abstract class LocalValueProviderFactory {
     }
 
     private static _paging(data: any[], page: number, pageSize: number) {
+        if (!pageSize) {
+            return data;
+        }
+
         const offset = (page - 1) * pageSize;
         return data.slice(offset, offset + pageSize);
     }
